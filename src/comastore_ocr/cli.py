@@ -5,7 +5,11 @@ from pathlib import Path
 
 from .config import DATA_DIR
 from .convert import convert_json_dir_to_jsonl
-from .processing import process_images_in_directory, validate_existing_jsons_in_directory
+from .processing import (
+    process_images_in_directory,
+    validate_existing_jsons_in_directory,
+    sort_dataset_by_promo,
+)
 
 
 def _cmd_process(args: argparse.Namespace) -> None:
@@ -39,6 +43,15 @@ def main() -> None:
         data_dir = Path(args.data_dir) if args.data_dir else DATA_DIR
         validate_existing_jsons_in_directory(data_dir=data_dir, delete_none=not args.keep_none)
     p3.set_defaults(func=_cmd_validate)
+
+    p4 = sub.add_parser("sort", help="Group image+JSON pairs by promo type into subfolders")
+    p4.add_argument("--data-dir", type=Path, default=None, help="Source directory (default: config.DATA_DIR)")
+    p4.add_argument("--out", type=Path, default=None, help="Output root directory (default: <data-dir>/../sorted)")
+    p4.add_argument("--move", action="store_true", help="Move files instead of copying")
+    def _cmd_sort(args: argparse.Namespace) -> None:
+        data_dir = Path(args.data_dir) if args.data_dir else DATA_DIR
+        sort_dataset_by_promo(data_dir=data_dir, out_dir=args.out, move=args.move)
+    p4.set_defaults(func=_cmd_sort)
 
     args = parser.parse_args()
     args.func(args)

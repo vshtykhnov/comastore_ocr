@@ -1,4 +1,5 @@
 import json
+import shutil
 import time
 from pathlib import Path
 from typing import Dict, List
@@ -338,4 +339,79 @@ def validate_existing_jsons_in_directory(
             time.sleep(REQUEST_PAUSE_SEC)
 
     print(f"Done. Fixed: {fixed}, Removed: {removed}, Total processed: {total}")
+
+
+def _find_sibling_image(json_path: Path) -> Path | None:
+    for ext in IMAGE_EXTENSIONS:
+        candidate = json_path.with_suffix(ext)
+        if candidate.exists():
+            return candidate
+    return None
+
+
+def sort_dataset_by_promo(
+    data_dir: Path = DATA_DIR,
+    out_dir: Path | None = None,
+    move: bool = False,
+) -> None:
+    """Group image+JSON pairs by promo type into subfolders under out_dir.
+
+    - Scans `data_dir` for *.json
+    - For each JSON, finds sibling image with same stem (any supported extension)
+    - Reads `promo` and writes both files to `<out_dir>/<promo>/`
+    - If `move` True, move files; else copy
+    """
+
+    if not data_dir.exists():
+        raise FileNotFoundError(f"Directory {data_dir} not found")
+
+    if out_dir is None:
+        out_dir = data_dir.parent / "sorted"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    json_files = sorted(data_dir.glob("*.json"))
+    if not json_files:
+        print("ℹ️  No JSON files found to sort.")
+        return
+
+    moved = 0
+    copied = 0
+    skipped = 0
+
+    for json_path in json_files:
+        img_path = _find_sibling_image(json_path)
+        if img_path is None:
+            print(f"[WARN] No image found for {json_path.name} — skipping")
+            skipped += 1
+            continue
+
+        try:
+            with json_path.open("r", encoding="utf-8") as h:
+                obj = json.load(h)
+        except Exception as e:  # noqa: BLE001
+            print(f"[WARN] Cannot read JSON {json_path.name}: {e}")
+            skipped += 1
+            continue
+
+        promo_code = str(obj.get("promo", "UNKNOWN")).strip() or "UNKNOWN"
+        dst_dir = out_dir / promo_code
+        dst_dir.mkdir(parents=True, exist_ok=True)
+
+        def transfer(src: Path, dst_dir: Path) -> None:
+            dest = dst_dir / src.name
+            if move:
+                shutil.move(str(src), str(dest))
+            else:
+                shutil.copy2(src, dest)
+
+        transfer(img_path, dst_dir)
+        transfer(json_path, dst_dir)
+        if move:
+            moved += 2
+        else:
+            copied += 2
+
+    verb = "Moved" if move else "Copied"
+    total_pairs = (moved + copied) // 2
+    print(f"{verb} {total_pairs} pair(s). Skipped: {skipped}. Output: {out_dir}")
 
