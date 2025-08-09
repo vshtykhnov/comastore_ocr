@@ -15,3 +15,4 @@ Thumbs.db
 train_data/
 *.log
 
+*.jsonl
