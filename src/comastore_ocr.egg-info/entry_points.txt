@@ -1,0 +1,2 @@
+[console_scripts]
+comastore-ocr = comastore_ocr.cli:main

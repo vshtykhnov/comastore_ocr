@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "comastore-ocr"
+version = "0.1.0"
+description = "ComaStore OCR: dataset processing and conversion"
+requires-python = ">=3.10"
+dependencies = [
+    "python-dotenv",
+    "openai>=1.0.0",
+    "pillow",
+]
+
+[project.scripts]
+comastore-ocr = "comastore_ocr.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["comastore_ocr*"]
+
+
