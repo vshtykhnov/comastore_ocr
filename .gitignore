@@ -13,7 +13,6 @@ Thumbs.db
 
 # Project artifacts
 train_data/
-sorted/
 *.log
 
 *.jsonl
