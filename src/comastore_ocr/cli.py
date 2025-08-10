@@ -4,7 +4,7 @@ import argparse
 from pathlib import Path
 
 from .config import DATA_DIR
-from .processing import process_images_in_directory
+from .processing import process_images_in_directory, filter_sorted_directory
 from .local_ocr.sort_textual import sort_by_text_rules
 
 
@@ -39,6 +39,18 @@ def main() -> None:
         move=a.move,
         dump_text=not a.no_dump_text,
     ))
+
+    p3 = sub.add_parser("filter-sorted", help="Copy/move only files with existing JSON pairs from a sorted tree")
+    p3.add_argument("--src", type=Path, default=None, help="Source sorted dir (default: comastore_ocr/out/sorted if exists, else DATA_DIR)")
+    p3.add_argument("--dst", type=Path, default=None, help="Destination dir (default: comastore_ocr/out/sorted_filtered)")
+    p3.add_argument("--move", action="store_true", help="Move files instead of copying")
+    def _run_filter(a):
+        from .config import PROJECT_ROOT
+        default_src = PROJECT_ROOT / "out" / "sorted"
+        src = Path(a.src) if a.src else (default_src if default_src.exists() else DATA_DIR)
+        dst = Path(a.dst) if a.dst else (PROJECT_ROOT / "out" / "sorted_filtered")
+        filter_sorted_directory(src_dir=src, dst_dir=dst, move=a.move)
+    p3.set_defaults(func=_run_filter)
 
     
 

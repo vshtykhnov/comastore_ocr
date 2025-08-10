@@ -5,7 +5,12 @@ from pathlib import Path
 # Base directories
 # PROJECT_ROOT should be the package root directory: comastore_ocr/
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DATA_DIR = Path(os.getenv("DATA_DIR", PROJECT_ROOT / "train_data"))
+
+# Prefer out/sorted if it exists; otherwise use train_data. Can be overridden via DATA_DIR env var.
+_default_images_dir = PROJECT_ROOT / "out" / "sorted"
+if not _default_images_dir.exists():
+    _default_images_dir = PROJECT_ROOT / "train_data"
+DATA_DIR = Path(os.getenv("DATA_DIR", _default_images_dir))
 
 
 # Image formats supported
