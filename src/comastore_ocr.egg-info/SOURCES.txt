@@ -3,11 +3,13 @@ pyproject.toml
 src/comastore_ocr/__init__.py
 src/comastore_ocr/cli.py
 src/comastore_ocr/config.py
-src/comastore_ocr/convert.py
 src/comastore_ocr/image_utils.py
 src/comastore_ocr/openai_utils.py
 src/comastore_ocr/processing.py
 src/comastore_ocr/prompts.py
+src/comastore_ocr/sort_textual.py
+src/comastore_ocr/text_ocr.py
+src/comastore_ocr/text_rules.py
 src/comastore_ocr/validation.py
 src/comastore_ocr.egg-info/PKG-INFO
 src/comastore_ocr.egg-info/SOURCES.txt

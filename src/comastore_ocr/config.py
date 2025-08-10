@@ -14,12 +14,14 @@ IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}
 
 # OpenAI configuration
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
-OPENAI_MAX_RPM = int(os.getenv("OPENAI_MAX_RPM", "500"))
 
-if "REQUEST_PAUSE_SEC" in os.environ:
-    REQUEST_PAUSE_SEC = float(os.getenv("REQUEST_PAUSE_SEC", "0"))
-else:
-    REQUEST_PAUSE_SEC = (60.0 / OPENAI_MAX_RPM) * 1.05
+# Response token cap. Our JSON is tiny; keep low for speed/cost
+OPENAI_MAX_TOKENS = int(os.getenv("OPENAI_MAX_TOKENS", "120"))
+
+
+"""
+No image preprocessing configuration – images are sent as-is.
+"""
 
 
 

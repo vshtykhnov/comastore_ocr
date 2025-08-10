@@ -1,15 +1,18 @@
 import re, math
 from typing import Tuple
 
-ALLOWED_PROMO_CODES = {"NONE", "SUP", "DISC", "DEALPCT", "DEALFIX", "BXYG", "PACK"}
+ALLOWED_PROMO_CODES = {"NONE", "SUP", "DISC", "DEALFIX", "BXYG", "PACK"}
 
 _SINGLE_PACK = r"(?:[1-9]\d*(?::(?:100|\d{1,2}))?|[1-9]\d*x[1-9]\d*(?::(?:100|\d{1,2}))?)"
 
 PROMO_ARGS_PATTERNS = {
     "NONE":     re.compile(r"^$"),
     "SUP":      re.compile(r"^$|^[1-9]\d*$"),
-    "DISC":     re.compile(r"^(100|\d{1,2})$"),
-    "DEALPCT":  re.compile(r"^[1-9]\d*:(100|\d{1,2})$"),
+    # DISC now accepts one of:
+    #  - P (0..100)
+    #  - N (integer ≥1)
+    #  - N:P (e.g. 2:40)
+    "DISC":     re.compile(r"^((100|\d{1,2})|[1-9]\d*(?::(100|\d{1,2}))?)$"),
     "DEALFIX":  re.compile(r"^[1-9]\d*=\d+(\.\d{1,2})?$"),
     "BXYG":     re.compile(r"^[1-9]\d*:[1-9]\d*$"),
     "PACK":     re.compile(rf"^{_SINGLE_PACK}(?:\|{_SINGLE_PACK})*$"),
@@ -47,3 +50,5 @@ def validate_label_object(obj: object) -> Tuple[bool, str]:
         return False, f"promo_args '{pa}' invalid for {promo}"
 
     return True, ""
+
+

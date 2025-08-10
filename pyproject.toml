@@ -11,6 +11,7 @@ dependencies = [
     "python-dotenv",
     "openai>=1.0.0",
     "pillow",
+    "pytesseract",
 ]
 
 [project.scripts]
