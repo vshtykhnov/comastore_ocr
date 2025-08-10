@@ -3,7 +3,8 @@ from pathlib import Path
 
 
 # Base directories
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+# PROJECT_ROOT should be the package root directory: comastore_ocr/
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = Path(os.getenv("DATA_DIR", PROJECT_ROOT / "train_data"))
 
 
