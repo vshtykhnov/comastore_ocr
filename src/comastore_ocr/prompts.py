@@ -1,34 +1,37 @@
 PROMPT_TEXT = (
-    "You will receive ONE product-promotion image. Return ONLY valid JSON with EXACTLY four keys:\n"
-    "{\n"
-    '  "name":        "<product name in Polish, exactly as on the image>",\n'
-    '  "price":       <number OR null>,\n'
-    '  "promo":       "<ONE of: NONE, SUP, DISC, DEALPCT, DEALFIX, BXYG, PACK>",\n'
-    '  "promo_args":  "<see rules below>"\n'
-    "}\n\n"
-    "promo / promo_args grammar (strict):\n"
-    "• NONE     → promo_args=\"\"\n"
-    "• SUP      → promo_args=\"\" OR N                 (integer ≥1)\n"
-    "• DISC     → promo_args=P                        (P in 0..100, number only)\n"
-    "• DEALPCT  → promo_args=\"N:P\"                   (integers; e.g. \"3:27\", \"2:40\")\n"
-    "• DEALFIX  → promo_args=\"N=price\"              (e.g. \"2=1.00\")\n"
-    "• BXYG     → promo_args=\"X:Y\"                   (e.g. \"1:1\", \"4:2\")\n"
-    "• PACK     → ONE of the following tokens (no spaces):\n"
-    "             - \"N\"        (price for ONE pack containing N units; e.g. \"12\")\n"
-    "             - \"N:P\"      (% off when buying ONE N-pack; e.g. \"6:43\")\n"
-    "             - \"AxB\"      (deal involving MULTIPLE packs; e.g. \"2x6\")\n"
-    "             - \"AxB:P\"    (% off on extra pack(s); e.g. \"2x6:50\")\n"
-    "             - OR a list of the tokens above joined by \"|\" (no spaces), e.g. \"2x6|12\", \"6:43|12\".\n"
-    "             - The \"|\" separator is allowed ONLY for PACK.\n\n"
-    "Additional rules:\n"
-    "• Use ONLY the 7 allowed promo codes. Never invent new codes.\n"
-    "• If the ad shows NO numeric price, set \"price\": null (never guess).\n"
-    "• If both old and new prices are shown, set \"price\" to the discounted/new price.\n"
-    "• Ignore unit prices (zł/kg, zł/l), dates, and loyalty-card notes; capture only the main promotion.\n"
-    "• PACK is used only when the price/discount explicitly refers to a pack (e.g., \"12-pak\", \"2×6-pak\"). "
-    "  If the ad says \"X+Y gratis\" (even for packs), use BXYG instead.\n"
-    "• Include pack size in \"name\" ONLY if that exact text appears next to the product name.\n"
-    "• Use a dot for decimals (19.99). Do not include % or currency symbols in numeric fields.\n"
-    "• If multiple patterns match, resolve by priority: BXYG > PACK > DEALFIX > DEALPCT > DISC > SUP > NONE.\n"
-    "• Return JSON only — no markdown, no extra text."
+    'You will receive ONE product-promotion image. Return ONLY valid JSON with EXACTLY four keys:\n'
+    '{\n'
+    '  "name": "<Polish name exactly as on image>",\n'
+    '  "price": <number OR null>,\n'
+    '  "promo": "<ONE of: NONE, SUP, DISC, DEALPCT, DEALFIX, BXYG, PACK>",\n'
+    '  "promo_args": "<see grammar>"\n'
+    '}\n\n'
+    'Grammar (strict):\n'
+    '• NONE    → promo_args=""\n'
+    '• SUP     → promo_args="" OR N                  (integer ≥1)\n'
+    '• DISC    → promo_args=P                        (0..100)\n'
+    '• DEALPCT → promo_args="N:P"                    (e.g. "2:40", "3:25")\n'
+    '• DEALFIX → promo_args="N=price"                (e.g. "2=1.00")\n'
+    '• BXYG    → promo_args="X:Y"                    (e.g. "1:1", "5:5")\n'
+    '• PACK    → ONE of: "N" | "N:P" | "AxB" | "AxB:P"\n'
+    '            You may list multiple PACK tokens joined by "|" (no spaces), e.g. "2x6|12".\n\n'
+    'Keyword → promo (hard rules):\n'
+    '• "X+Y gratis" → BXYG, promo_args="X:Y".\n'
+    '• "drugi … % taniej" → DEALPCT, promo_args="2:%".\n'
+    '• "% taniej przy zakupie N" → DEALPCT, "N:%".\n'
+    '• "drugi za X zł" / "N-ty za X zł" → DEALFIX, "N=X".\n'
+    '• Any of "N-pak", "N-PAKU", "AxB-paku", pattern \\d+x\\d+ or "-pak" → PACK.\n'
+    '• "cena za 1 … przy zakupie N-paku" → PACK, "N".\n'
+    '• "drugi … % taniej przy zakupie AxB-paku" → PACK, "AxB:%".\n'
+    '• "TERAZ TANIEJ" or standalone "X% TANIEJ" (no conditions) → DISC.\n'
+    '• "NA STAŁE W OFERCIE" → NONE.\n'
+    '• "SUPERCENA" w/o conditions → SUP; with "PRZY ZAKUPIE N-PAKU" → PACK.\n\n'
+    'Price:\n'
+    '• If no numeric price on the image → "price": null.\n'
+    '• Convert "5,33" or "5 33" to 5.33. If old+new are shown, use the discounted/new price.\n'
+    '• Use dot for decimals; no currency/% symbols in numeric fields.\n\n'
+    'Other:\n'
+    '• Include pack size in "name" ONLY if that exact text is next to the product name.\n'
+    '• If multiple patterns match, priority: BXYG > PACK > DEALFIX > DEALPCT > DISC > SUP > NONE.\n'
+    '• Return JSON only — no extra text or backticks.'
 )
