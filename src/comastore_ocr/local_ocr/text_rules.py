@@ -26,18 +26,6 @@ def rule_bxyg(text: str) -> Optional[str]:
     return None
 
 
-def rule_pack(text: str) -> Optional[str]:
-    # Only classify as PACK when there is an explicit purchase condition WITH the pack word,
-    # e.g. "przy zakupie 2-paku" / "PRZY ZAKUPIE 2-PAKU" / "przy zakupie 2 paków".
-    # Do NOT trigger on pack-size mentions like "6-pak" or on bare "przy zakupie" without pack.
-    if re.search(r"\bprzy\s+zakupie\b[\s\S]{0,40}?\b\d+\s*[- ]?\s*pak(ów|u)?\b", text, flags=re.IGNORECASE):
-        return "PACK"
-    # Also classify as PACK when text contains constructs like "przy 6-pak(u)"
-    if re.search(r"\bprzy\b[\s\S]{0,20}?\b\d+\s*[- ]?\s*pak(ów|u)?\b", text, flags=re.IGNORECASE):
-        return "PACK"
-    return None
-
-
 # Removed separate DEALPCT; patterns moved into rule_disc
 
 
@@ -68,11 +56,8 @@ def rule_disc(text: str) -> Optional[str]:
 
 
 def rule_sup(text: str) -> Optional[str]:
-    # SUPERCENA allowed even if phrase like "przy zakupie" appears;
-    # exclude only when explicit PAK/PAKU markers are present
+    # SUPERCENA: allow regardless of presence of "pak/PAKU" or other qualifiers
     if _contains_any(text, ["supercena"]):
-        if re.search(r"\bpak(u)?\b", text, flags=re.IGNORECASE):
-            return None
         return "SUP"
     return None
 
@@ -85,7 +70,6 @@ def rule_none(text: str) -> Optional[str]:
 
 DEFAULT_RULES: List[Callable[[str], Optional[str]]] = [
     rule_bxyg,
-    rule_pack,
     rule_dealfix,
     rule_disc,
     rule_sup,

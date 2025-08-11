@@ -1,7 +1,7 @@
 import re, math
 from typing import Tuple
 
-ALLOWED_PROMO_CODES = {"NONE", "SUP", "DISC", "DEALFIX", "BXYG", "PACK"}
+ALLOWED_PROMO_CODES = {"NONE", "SUP", "DISC", "DEALFIX", "BXYG"}
 
 _SINGLE_PACK = r"(?:[1-9]\d*(?::(?:100|\d{1,2}))?|[1-9]\d*x[1-9]\d*(?::(?:100|\d{1,2}))?)"
 
@@ -15,7 +15,6 @@ PROMO_ARGS_PATTERNS = {
     "DISC":     re.compile(r"^((100|\d{1,2})|[1-9]\d*(?::(100|\d{1,2}))?)$"),
     "DEALFIX":  re.compile(r"^[1-9]\d*=\d+(\.\d{1,2})?$"),
     "BXYG":     re.compile(r"^[1-9]\d*:[1-9]\d*$"),
-    "PACK":     re.compile(rf"^{_SINGLE_PACK}(?:\|{_SINGLE_PACK})*$"),
 }
 
 def validate_label_object(obj: object) -> Tuple[bool, str]:

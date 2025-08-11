@@ -23,7 +23,6 @@ class OpenAIEngine(LabelEngine):
                 "• DISC    → promo_args= ONE of: P (0..100) | N | \"N:P\"  (e.g. 20 | 2 | \"2:40\")\n"
                 "• DEALFIX → promo_args=\"N=price\"                (e.g. \"2=1.00\")\n"
                 "• BXYG    → promo_args=\"X:Y\"                    (e.g. \"1:1\", \"5:5\")\n"
-                "• PACK    → ONE of: \"N\" | \"N:P\" | \"AxB\" | \"AxB:P\"; multiple packs can be joined by '|' (e.g. \"2x6|12\")\n"
             )
             simplified_prompt = (
                 "You will receive ONE product-promotion image. Return ONLY valid JSON with EXACTLY four keys:\n"
