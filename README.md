@@ -59,9 +59,12 @@ cd comastore_ocr
 python -m comastore_ocr.cli process-images --engine openai
 ```
 
-Sort images by textual rules (requires Tesseract with Polish language installed):
+Sort images by textual rules (requires Tesseract with Polish language installed). On Windows, if Tesseract is not on PATH, set the binary path for this session:
 
 ```powershell
+# Optionally set Tesseract path (if not found automatically)
+$env:TESSERACT_CMD="C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+
 python -m comastore_ocr.cli sort-text --data-dir comastore_ocr\train_data --out comastore_ocr\out\sorted --lang pol
 ```
 
