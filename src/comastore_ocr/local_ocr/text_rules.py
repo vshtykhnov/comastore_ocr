@@ -21,7 +21,7 @@ def rule_bxyg(text: str) -> Optional[str]:
     # Keywords like "X+Y gratis" → BXYG
     if re.search(r"\b(\d+)\s*\+\s*(\d+)\s*gratis\b", text, flags=re.IGNORECASE):
         return "BXYG"
-    if _contains_any(text, ["gratis przy zakupie", "x+y gratis"]):
+    if _contains_any(text, ["gratis przy zakupie", "gratis"]):
         return "BXYG"
     return None
 

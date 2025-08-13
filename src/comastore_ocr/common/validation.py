@@ -82,11 +82,8 @@ def validate_label_object(obj: object) -> Tuple[bool, str]:
         if nth:
             return False, "BXYG requires nth=''"
     if promo == "DISC":
-        # if nth set → cond must be integer and equal to nth
-        if nth:
-            if not cond.isdigit():
-                return False, "DISC with nth requires integer cond"
-            if int(nth) != int(cond):
-                return False, "DISC nth must equal cond (e.g., drugi: cond=2, nth=2)"
+        # No special cross-field requirement: allow nth to indicate which item is discounted
+        # independently of cond, which may describe a threshold or pack (e.g., "2x5").
+        pass
 
     return True, ""

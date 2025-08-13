@@ -11,7 +11,7 @@ PROMPT_TEXT = (
     'Grammar (strict):\n'
     '• promo=NONE    → core="", cond="", nth=""\n'
     '• promo=SUP     → core="", cond="" OR N OR AxB OR alternatives like 1x12|2x6, nth=""\n'
-    '• promo=DISC    → core=P (0..100), cond="" OR N OR AxB OR alternatives (e.g. 1x12|2x6),\n'
+    '• promo=DISC    → core=P (0..100), cond="" OR N ORclear AxB OR alternatives (e.g. 1x12|2x6),\n'
     '                  nth=""  OR  nth=N ONLY for phrases like "drugi/trzeci/N-ty … % taniej"\n'
     '• promo=DEALFIX → core="X.xx" (fixed price), cond=N OR AxB (e.g. "2" or "2x6"), nth=""\n'
     '• promo=BXYG    → core="X:Y" (e.g. "1:1","6:6"), cond="" OR N/AxB/alternatives, nth=""\n'
