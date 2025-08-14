@@ -1,16 +1,16 @@
-from __future__ import annotations
+"""Engines module for ComaStore OCR."""
 
+from .factory import get_engine, register_engine, list_engines, test_engine
 from .base import LabelEngine
 from .openai_engine import OpenAIEngine
 
-
-def get_engine(name: str = "openai") -> LabelEngine:
-    normalized = (name or "openai").strip().lower()
-    if normalized in {"openai", "gpt", "gpt4o", "gpt-4o", "gpt-4o-mini"}:
-        return OpenAIEngine()
-    raise ValueError(f"Unknown engine '{name}'. Supported: openai")
-
-
-__all__ = ["LabelEngine", "OpenAIEngine", "get_engine"]
+__all__ = [
+    "get_engine",
+    "register_engine", 
+    "list_engines",
+    "test_engine",
+    "LabelEngine",
+    "OpenAIEngine",
+]
 
 

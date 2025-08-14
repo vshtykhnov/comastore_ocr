@@ -8,8 +8,8 @@ version = "0.1.0"
 description = "ComaStore OCR: dataset processing and conversion"
 requires-python = ">=3.10"
 dependencies = [
-    "python-dotenv",
-    "openai>=1.0.0",
+    "python-dotenv>=1.0.0",
+    "openai>=1.13.3",
     "pillow",
     "pytesseract",
 ]

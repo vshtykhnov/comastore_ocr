@@ -1,81 +1,37 @@
-## ComaStore OCR
+# ComaStore OCR
 
-Utilities to extract structured labels from retail promotion images.
+OCR system for analyzing product images and classifying them by promotion types.
 
-### Features
-
-- OpenAI-based vision extraction via pluggable engines
-- Tesseract OCR + rule-based textual sorter
-- Validates labels with a strict schema
-
-### Project layout
-
-- `src/comastore_ocr/`: library and CLI
-  - `config.py`: paths and runtime settings (`DATA_DIR`, model)
-  - `engines/`: pluggable backends for label generation
-    - `openai_engine.py`: OpenAI-powered engine (default)
-    - `base.py`: engine interface
-  - `prompts.py`: system prompt for vision extraction
-  - `openai_utils.py`: low-level OpenAI chat wrapper used by the OpenAI engine
-  - `processing.py`: iterate images, call selected engine, save `<image>.json`
-  - `sort_textual.py`: Tesseract OCR + rule-based classifier for manual grouping
-  - `validation.py`: JSON schema checks for labels
-  - `image_utils.py`: image → data URI helpers
-  - `train_data/`: images and generated JSON labels
-
-### Installation
+## Installation
 
 ```bash
 pip install -e .
 ```
 
-Environment variable `OPENAI_API_KEY` must be set.
-You can put it in `.env` at the repo root or in `comastore_ocr/.env`, e.g.:
+## Usage
 
-```
-OPENAI_API_KEY=sk-...
-```
-
-Optional environment variables:
-
-- `DATA_DIR` (default: `./train_data`)
-- `OPENAI_MODEL` (default: `gpt-4o-mini`)
-- `OPENAI_MAX_TOKENS` (default: 120) — cap on response tokens
-
-### Usage (CLI)
-
-Process images and generate `<image>.json` labels. You can choose an engine; currently supported: `openai` (default).
-
-Windows PowerShell (from the repo root):
-
-```powershell
-python -m comastore_ocr.cli process-images --data-dir comastore_ocr\train_data --engine openai
+### Process Images
+Generate labels for images in directory:
+```bash
+python -m comastore_ocr.cli process
 ```
 
-Windows PowerShell (from the `comastore_ocr` folder):
-
-```powershell
-cd comastore_ocr
-python -m comastore_ocr.cli process-images --engine openai
+### Sort Images
+Sort images using Tesseract + rules:
+```bash
+python -m comastore_ocr.cli sort
 ```
 
-Sort images by textual rules (requires Tesseract with Polish language installed). On Windows, if Tesseract is not on PATH, set the binary path for this session:
+## Configuration
 
-```powershell
-# Optionally set Tesseract path (if not found automatically)
-$env:TESSERACT_CMD="C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+All commands use sensible defaults:
+- **Data directory**: `train_data` or `out/sorted` (if exists)
+- **Engine**: `openai`
+- **Language**: `pol` (Polish)
+- **Output**: `out/sorted` for sorting
 
-python -m comastore_ocr.cli sort-text --data-dir comastore_ocr\train_data --out comastore_ocr\out\sorted --lang pol
-```
+## Environment Variables
 
-If you installed the package:
-
-```powershell
-comastore-ocr process-images --data-dir comastore_ocr\train_data --engine openai
-```
-
-### Notes
-
-- Adjust `DATA_DIR` if your dataset directory differs.
-- Install Tesseract OCR and Polish language pack (e.g., Windows installer + `pol` traineddata).
-- The tool waits only when API returns 429 and honors Retry-After.
+- `DATA_DIR`: Override default data directory
+- `OPENAI_MODEL`: OpenAI model to use (default: gpt-4o-mini)
+- `OPENAI_MAX_TOKENS`: Max tokens for OpenAI responses (default: 120)

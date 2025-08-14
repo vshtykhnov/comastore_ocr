@@ -1,13 +1,14 @@
-from __future__ import annotations
+"""Local OCR module for ComaStore OCR."""
 
-from .sort_textual import sort_by_text_rules
+from .text_rule import TextRule
+from .text_rules_engine import TextRulesEngine, DEFAULT_RULES
 from .text_ocr import ocr_image_to_text
-from .text_rules import DEFAULT_RULES
 
 __all__ = [
-    "sort_by_text_rules",
-    "ocr_image_to_text",
+    "TextRule",
+    "TextRulesEngine",
     "DEFAULT_RULES",
+    "ocr_image_to_text",
 ]
 
 

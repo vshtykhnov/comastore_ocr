@@ -3,9 +3,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 from typing import Dict, List, Optional
-
-import openai
-
 from ..common import encode_image_to_data_uri
 from ..openai import call_openai_with_json, PROMPT_TEXT
 from ..common import validate_label_object
@@ -15,8 +12,6 @@ from .base import LabelEngine
 class OpenAIEngine(LabelEngine):
     def build_messages(self, image_path: Path, forced_promo: Optional[str] = None) -> List[Dict]:
         data_uri = encode_image_to_data_uri(image_path)
-        # Always use the unified 6-key schema prompt. If promo is forced, we explicitly instruct the model
-        # to set promo to the forced value and follow the corresponding grammar for core/cond/nth.
         user_text = (
             f"Promo is fixed to {forced_promo}. Set \"promo\": \"{forced_promo}\" and infer valid core/cond/nth for this promo."
             if forced_promo
@@ -39,9 +34,7 @@ class OpenAIEngine(LabelEngine):
         obj = json.loads(text_response)
         is_valid, err = validate_label_object(obj)
         if not is_valid:
-            # Show the raw first response for easier debugging
             print(f"⚠️  Raw model response (invalid) for {image_path.name}: {text_response}")
-            # one correction attempt
             correction_messages = base_messages + [
                 {
                     "role": "user",
@@ -56,7 +49,6 @@ class OpenAIEngine(LabelEngine):
             is_valid, err = validate_label_object(obj)
             if not is_valid:
                 print(f"⚠️  Raw correction response (invalid) for {image_path.name}: {text_response}")
-                # Include the raw response in the exception to bubble up to the CLI logs
                 raise ValueError(
                     f"Schema validation failed: {err}. Raw: {text_response}"
                 )
