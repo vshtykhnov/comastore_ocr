@@ -3,7 +3,9 @@
 from pathlib import Path
 from typing import Dict
 
-from .image_processor import ImageProcessor, PromoInferrer, ImageFileManager
+from .image_processor import ImageProcessor
+from .promo_inferrer import PromoInferrer
+from .image_file_manager import ImageFileManager
 from ..config import IMAGE_EXTENSIONS
 
 

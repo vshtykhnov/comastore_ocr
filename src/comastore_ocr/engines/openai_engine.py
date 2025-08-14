@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 from ..common import encode_image_to_data_uri
 from ..openai import call_openai_with_json, PROMPT_TEXT
-from ..common import validate_label_object
+from ..validation.enhanced_validator import validate_label_object
 from .base import LabelEngine
 
 
