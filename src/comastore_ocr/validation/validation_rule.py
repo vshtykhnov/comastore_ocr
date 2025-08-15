@@ -1,7 +1,7 @@
 """Validation rule class for representing validation rules."""
 
 from dataclasses import dataclass
-from typing import Callable, Optional, Dict
+from typing import Callable
 
 
 @dataclass(frozen=True)

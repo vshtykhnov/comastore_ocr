@@ -1,6 +1,5 @@
 """Process images command handler."""
 
-from pathlib import Path
 from typing import Dict, Any
 
 from .command_handler import CommandHandler

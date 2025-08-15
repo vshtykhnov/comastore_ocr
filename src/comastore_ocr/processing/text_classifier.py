@@ -1,9 +1,7 @@
 """Text classifier class for handling text classification using rules."""
 
 from typing import List, Optional
-
 from ..local_ocr.text_rules_engine import DEFAULT_RULES
-
 
 class TextClassifier:
     """Handles text classification using rules."""

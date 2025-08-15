@@ -5,7 +5,6 @@ from typing import Optional
 
 from ..common.validation import ALLOWED_PROMO_CODES
 
-
 class PromoInferrer:
     """Handles promotion code inference from directory names."""
     

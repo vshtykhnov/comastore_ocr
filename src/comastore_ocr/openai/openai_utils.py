@@ -5,9 +5,7 @@ import openai
 
 from ..config import OPENAI_MODEL, OPENAI_MAX_TOKENS
 
-
 load_dotenv()
-
 
 def call_openai_with_json(messages: List[Dict[str, Any]], use_json_response_format: bool = True) -> str:
     """Call OpenAI chat completion with optional JSON response format.

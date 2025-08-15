@@ -7,7 +7,6 @@ from typing import Dict, Optional
 
 from ..engines import get_engine
 
-
 class ImageProcessor:
     """Handles image processing with retry logic and progress tracking."""
     
