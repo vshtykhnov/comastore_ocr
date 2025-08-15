@@ -10,13 +10,11 @@ src/comastore_ocr.egg-info/entry_points.txt
 src/comastore_ocr.egg-info/requires.txt
 src/comastore_ocr.egg-info/top_level.txt
 src/comastore_ocr/cli/__init__.py
+src/comastore_ocr/cli/__main__.py
 src/comastore_ocr/cli/command_handler.py
 src/comastore_ocr/cli/enhanced_cli.py
-src/comastore_ocr/cli/filter_sorted_handler.py
-src/comastore_ocr/cli/list_engines_handler.py
 src/comastore_ocr/cli/process_images_handler.py
 src/comastore_ocr/cli/sort_text_handler.py
-src/comastore_ocr/cli/test_engine_handler.py
 src/comastore_ocr/common/__init__.py
 src/comastore_ocr/common/helpers.py
 src/comastore_ocr/common/image_encoder.py

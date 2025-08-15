@@ -4,6 +4,20 @@ OCR system for analyzing product images and classifying them by promotion types.
 
 ## Installation
 
+### Create Virtual Environment
+```bash
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment
+# On Windows:
+venv\Scripts\activate
+
+# On macOS/Linux:
+source venv/bin/activate
+```
+
+### Install Dependencies
 ```bash
 pip install -e .
 ```
